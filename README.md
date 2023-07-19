@@ -25,8 +25,6 @@ DELETE /api/delete/:id' Delete a user by its ID.
 # Search Functionality
 GET /api/getuser: get all the user.
 
-# Used for  Testing mocha and chai
-
-# used for validation joiValidator
-
+# Used mocha and chai for  Testing 
+# used joiValidator for validation 
 # used jwt token 
