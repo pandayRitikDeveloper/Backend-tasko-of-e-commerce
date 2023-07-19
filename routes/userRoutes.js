@@ -7,7 +7,7 @@ const authController = require('../controllers/authController');
 const joiValidator = require('../services/joi_validation');
 
 router.post('/login', joiValidator.loginValidation, authController.login);
-router.post('/create', joiValidator.createValidation, userController.create);
+router.post('/register', joiValidator.createValidation, userController.create);
 router.delete('/delete/:id', userController.delete);
 router.patch('/edit/:id', userController.edit);
 router.get('/getuser', userController.getAll);
