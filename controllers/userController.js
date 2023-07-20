@@ -1,8 +1,5 @@
 const bcrypt = require('bcrypt');
 const Model = require('../models/usersModel');
-const redis = require('redis');
-const redisPort = 6379;
-
 // it is use the create or add a new user in the Databse
 module.exports.create = async function (req, res, next) {
   const email = req.body.email;
@@ -17,56 +14,20 @@ module.exports.create = async function (req, res, next) {
     
     if (user) return res.status(400).json('User already registered.');
     const dataToSave = await data.save();
-    // sending Email
-    if (dataToSave) {
-      await sendEmail({
-        email,
-        subject: 'registered',
-        message: 'Congratulations you are Registered',
-      });
-    }
-
-    res.status(201).json(dataToSave);
+    res.status(200).json(dataToSave);
   } catch (error) {
     return res.status(500).json({ message: 'Internal Server Error' });
   }
 };
 
-// get th single user data with the help of id
-module.exports.getOne = async function (req, res, next) {
-  try {
-    const data = await Model.findById(req.params.id);
-    res.json(data);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
 
 // get All the data of user with the help of id
 module.exports.getAll = async function (req, res, next) {
-  const limitValue = req.query.limit || 2;
-  let skipValue = req.query.skip || 0;
-  const key = 'getAll' + skipValue.toString() + limitValue.toString();
-  try {
-    const client = redis.createClient(redisPort);
-    client.connect();
-    // const data = await Model.find();
-    // use redis for caching
-    client.expire(key, 10);
-    const data = await client.get(key);
-    if (data) {
-      res.json(JSON.parse(data));
-    } else {
-      Model.paginate({}, { page: req.query.skip, limit: req.query.limit });
-
-      {
-        skipValue = skipValue * limitValue;
-        const data = await Model.find().limit(limitValue).skip(skipValue);
+  try{
+        const data = await Model.find()
         //console.log(client);
-        await client.set(key, JSON.stringify(data));
-        return res.json(data);
-      }
-    }
+        return res.status(200).json(data);
+    
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
