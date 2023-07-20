@@ -1,15 +1,12 @@
 const Model = require('../models/product');
 const tokenModel = require('../models/tokenModel');
 const expense = require('../models/product');
-const redis = require('redis');
-const redisPort = 6379;
 
-// it is use the create or add a new data in the Databs
+//add Functionality
 module.exports.create = async function (req, res, next) {
   let data;
   if (req.headers && req.headers.authorization) {
     const authorization = req.headers.authorization.split(' ')[1];
-    // console.log(authorization);
     tokenModel.findOne({ token: authorization }, function (err, user1) {
       if (err) return handleErr(err);
       data = new Model({
@@ -23,7 +20,7 @@ module.exports.create = async function (req, res, next) {
       try {
         const dataToSave = data.save();
         dataToSave.then(function (result) {
-          res.status(201).json(result); // "Some User token"
+          res.status(201).json(result); 
         });
       } catch (error) {
         res.status(400).json({ message: error.message });
@@ -31,7 +28,7 @@ module.exports.create = async function (req, res, next) {
     });
   }
 };
-
+//Search Functionality
 module.exports.seachItem = async function (req, res, next) {
 
   try{
@@ -47,15 +44,13 @@ module.exports.seachItem = async function (req, res, next) {
     res.status(500).json({ message: error.message });
   }
 };
-//delete expense if you entered wrong
-
+// it is use the delete data in the Databse
 module.exports.productDelete = async function (req, res, next) {
   try {
     let userId;
     const id = req.params.id;
     if (req.headers && req.headers.authorization) {
       const authorization = req.headers.authorization.split(' ')[1];
-      // console.log(authorization);
       tokenModel.findOne({ token: authorization }, function (err, user1) {
         if (err) return handleErr(err);
         userId = user1.userID;
@@ -81,7 +76,7 @@ module.exports.productDelete = async function (req, res, next) {
     res.status(400).json({ message: error.message });
   }
 };
-//update the expense the expense sheet has
+//update usaer Functionality
 module.exports.productUpdate = async function (req, res, next) {
   try {
     const id = req.params.id;
@@ -90,7 +85,6 @@ module.exports.productUpdate = async function (req, res, next) {
     let userId;
     if (req.headers && req.headers.authorization) {
       const authorization = req.headers.authorization.split(' ')[1];
-      // console.log(authorization);
       tokenModel.findOne({ token: authorization }, function (err, user1) {
         if (err) return handleErr(err);
         userId = user1.userID;
@@ -98,8 +92,6 @@ module.exports.productUpdate = async function (req, res, next) {
         expense.findOne({ userID: userId }, function (err, user2) {
           if (err) return handleErr(err);
           userId = user2._id;
-          // console.log(userId)
-          // console.log(id)
           if (userId == id) {
             async function asyncCall() {
               const result = await expense.findByIdAndUpdate(
@@ -117,15 +109,5 @@ module.exports.productUpdate = async function (req, res, next) {
     }
   } catch (error) {
     res.status(400).json({ message: error.message });
-  }
-};
-exports.me = function (req, res) {
-  if (req.headers && req.headers.authorization) {
-    const authorization = req.headers.authorization.split(' ')[1];
-    Model.find({ token: authorization })
-      .exec()
-      .then((user) => {
-        console.log(user[0]._id);
-      });
   }
 };
