@@ -1,6 +1,6 @@
 const Model = require('../models/product');
 const tokenModel = require('../models/tokenModel');
-const expense = require('../models/product');
+const productModel = require('../models/product');
 
 //add Functionality
 module.exports.create = async function (req, res, next) {
@@ -35,7 +35,7 @@ module.exports.seachItem = async function (req, res, next) {
     const amount = req.query.amount;
     const name=req.query.name;
     const description=req.query.description;
-    const data = await expense.find({
+    const data = await productModel.find({
       $or: [{ name}, {amount} ,{description}]
     })
   return  res.status(201).json(data);
@@ -55,14 +55,14 @@ module.exports.productDelete = async function (req, res, next) {
         if (err) return handleErr(err);
         userId = user1.userID;
 
-        expense.findOne({ userID: userId }, function (err, user2) {
+        productModel.findOne({ userID: userId }, function (err, user2) {
           if (err) return handleErr(err);
           userId = user2._id;
           console.log(userId);
           console.log(id);
           if (userId.toString() == id) {
             async function asyncCall() {
-              const data = await expense.findByIdAndDelete(req.params.id);
+              const data = await productModel.findByIdAndDelete(req.params.id);
               res.send(`Document with ${data.name} has been deleted..`);
             }
             asyncCall();
@@ -89,12 +89,12 @@ module.exports.productUpdate = async function (req, res, next) {
         if (err) return handleErr(err);
         userId = user1.userID;
 
-        expense.findOne({ userID: userId }, function (err, user2) {
+        productModel.findOne({ userID: userId }, function (err, user2) {
           if (err) return handleErr(err);
           userId = user2._id;
           if (userId == id) {
             async function asyncCall() {
-              const result = await expense.findByIdAndUpdate(
+              const result = await productModel.findByIdAndUpdate(
                 id,
                 updatedData,
                 options
