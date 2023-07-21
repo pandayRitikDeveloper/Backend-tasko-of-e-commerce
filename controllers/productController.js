@@ -51,6 +51,7 @@ module.exports.productDelete = async function (req, res, next) {
     let user = await Model.findOne({ email: req.body.email });
     // console.log(user)
     if(user){
+      //console.log(req.params.id)
       const data = await expense.findByIdAndDelete(req.params.id);
       res.json(data);
     }else
