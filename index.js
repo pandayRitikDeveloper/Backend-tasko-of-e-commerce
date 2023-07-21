@@ -1,14 +1,22 @@
 require('dotenv').config({ path: 'config.env' });
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/userRoutes');
 const expenseRoutes = require('./routes/productRoute');
 const app = express();
 app.use(express.json());
+const frontendURL = 'http://localhost:4200'; // Replace this with your frontend URL
+const corsOptions = {
+  origin: frontendURL,
+};
+
+app.use(cors(corsOptions));
+
 const mongoString = process.env.DATABASE_URL;
 app.use('/api', userRoutes);
-app.use('/api', expenseRoutes);
+app.use('/', expenseRoutes);
 mongoose.connect(mongoString,{useNewUrlParser: true})
 .then((res)=> console.log(">>>>>DB connected"))
 .catch((err)=> console.error("Connect fail"));

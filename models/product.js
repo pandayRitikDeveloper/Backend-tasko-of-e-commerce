@@ -1,28 +1,32 @@
+const { number, string } = require('joi');
 const { Schema, mongoose } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const userExpense = new Schema(
   {
-    name: {
+    productName: {
       type: String,
       required: true,
     },
-    amount: {
+    productPrice: {
       type: Number,
       required: true,
     },
-    description: {
-      type: String,
+    descountAmount: {
+      type: Number,
       required: true,
     },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+    descountPercentage: {
+      type: Number,
       required: true,
     },
-    category: {
-      type: "string",
-      required: true,
+    productImage:{
+      type:String,
+      required:true
     },
+    quantity:{
+      type:Number,
+      required:true
+    }
   },
   {
     versionKey: false,

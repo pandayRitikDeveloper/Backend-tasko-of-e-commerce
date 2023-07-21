@@ -1,16 +1,14 @@
 const express = require('express'); //import express
-
 const router = express.Router();
 const expenseController = require('../controllers/productController');
-const joi_validation = require('../services/joi_validation');
-
+const auth=require('../middleware/auth');
 router.post(
-  '/addProduct',
-  joi_validation.createExpenseValidation,
+  '/addProduct/',
+  auth,
   expenseController.create
 );
-router.get('/seachItem', expenseController.seachItem);
-router.delete('/productDelete/:id', expenseController.productDelete);
-router.patch('/productUpdate/:id', expenseController.productUpdate);
+router.get('/Allproducts/', auth,expenseController.getAll);
+router.delete('/productDelete/:id',auth, expenseController.productDelete);
+router.patch('/productUpdate/:id',auth, expenseController.productUpdate);
 
 module.exports = router;

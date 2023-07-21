@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const Model = require('../models/usersModel');
 const tokenModel = require('../models/tokenModel');
-const loginModel = require('../models/loginHistoryModel');
 const jwt = require('jsonwebtoken');
 
 // user login
@@ -60,12 +59,6 @@ module.exports.login = (req, res, next) => {
               }
             );
            
-        
-            //final response
-            const logData = new loginModel({
-              userID: user[0]._id,
-              userName: user[0].name,
-            });
             try {
               await logData.save();
             } catch (error) {
